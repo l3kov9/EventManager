@@ -1,13 +1,9 @@
 ﻿@model EventListingViewModel
-
 @{
     ViewData["Title"] = "MyEvents";
 }
-
 <h2>My Events</h2>
-
 <table class="table table-bordered table-hover">
-
     <thead>
         <tr>
             <th>Name</th>
@@ -33,10 +29,22 @@
                     @ev.EndDate.ToFriendlyDateTime()
                 </td>
                 <td>
-                    <div class="col-md-6">
+                    @if (ev.EndDate < DateTime.Now)
+                    {
+                        <div class="col-md-6">
+                            <a class="btn btn-default form-control">Passed event</a>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="col-md-6">
+                            <a class="btn btn-default form-control">Upcoming event</a>
+                        </div>
+                    }
+                    <div class="col-md-3">
                         <a href="/events/edit/@ev.Id" class=" btn btn-warning btn-sm form-control">Edit</a>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-3">
                         <form method="post" action="/events/delete/@ev.Id">
                             @Html.AntiForgeryToken()
                             <button class="btn btn-danger btn-sm form-control">Delete</button>
@@ -47,4 +55,3 @@
         }
     </tbody>
 </table>
-

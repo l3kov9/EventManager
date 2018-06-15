@@ -107,6 +107,7 @@
             => this.db
                 .Events
                 .OrderBy(e => e.StartDate)
+                .Where(e => e.StartDate >= DateTime.Now)
                 .Select(e => new EventServiceModel
                 {
                     Id = e.Id,
@@ -133,6 +134,6 @@
                     Username = e.User.UserName,
                     UserId = e.User.Id
                 })
-                .Where(e=>e.UserId == userId);
+                .Where(e => e.UserId == userId);
     }
 }
