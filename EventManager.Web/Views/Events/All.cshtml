@@ -1,0 +1,61 @@
+﻿@model EventListingViewModel
+@{
+    ViewData["Title"] = "All";
+}
+
+<h2>All events</h2>
+
+<table class="table table-bordered table-hover">
+
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Location</th>
+            <th>Start date</th>
+            <th>End date</th>
+            <th>added by</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var ev in Model.Events)
+        {
+            <tr>
+                <td>
+                    @ev.Name
+                </td>
+                <td>
+                    @ev.Location
+                </td>
+                <td>
+                    @ev.StartDate.ToFriendlyDateTime()
+                </td>
+                <td>
+                    @ev.EndDate.ToFriendlyDateTime()
+                </td>
+                <td>
+                    @ev.Username
+                </td>
+
+                <td>
+                    @if (ev.UserId == Model.CurrentUserId)
+                    {
+                        <div class="col-md-6">
+                            <a href="/events/edit/@ev.Id" class=" btn btn-warning btn-sm form-control">Edit</a>
+                        </div>
+                        <div class="col-md-6">
+                            <form method="post" action="/events/delete/@ev.Id">
+                                @Html.AntiForgeryToken()
+                                <button class="btn btn-danger btn-sm form-control">Delete</button>
+                            </form>
+                        </div>
+                    }
+                    else
+                    {
+                        <a class="btn btn-info form-control">You can't change this event</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

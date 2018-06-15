@@ -1,0 +1,107 @@
+﻿@model EventListingViewModel
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<link href="~/css/accordion.css" rel="stylesheet" />
+
+<div class="container">
+    <div class="row">
+
+        <div class="col-lg-3">
+            <h1 class="my-4">Event Manager</h1>
+            <br />
+
+            <button class="accordion">My events</button>
+            <div class="panel">
+                <p style="margin-top:50px">Visit your events here</p>
+                <a href="/events/myevents" style="margin-bottom:50px" class="btn btn-success form-control">View</a>
+            </div>
+
+            <button class="accordion">All events</button>
+            <div class="panel">
+                <p style="margin-top:50px">See all the events from all user</p>
+                <a href="/events/all" style="margin-bottom:50px" class="btn btn-success form-control">View</a>
+            </div>
+
+            <button class="accordion">Create event</button>
+            <div class="panel">
+                <p style="margin-top:50px">Create new event here</p>
+                <a href="/events/create" style="margin-bottom:50px" class="btn btn-success form-control">Create</a>
+            </div>
+
+        </div>
+
+        <div class="col-lg-9" style="margin-top:50px">
+            <img class="d-block img-fluid" src="http://cap60.com/images/Event-Manager-web-banner.jpg" style="opacity:0.5" alt="Event manager">
+
+            <div class="text-center" style="margin-top:100px">
+                <h2>Coming events:</h2>
+            </div>
+            <br />
+            <table class="table table-bordered table-hover">
+
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Location</th>
+                        <th>Start date</th>
+                        <th>End date</th>
+                        <th>added by</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var ev in Model.Events)
+                    {
+                        <tr>
+                            <td>
+                                @ev.Name
+                            </td>
+                            <td>
+                                @ev.Location
+                            </td>
+                            <td>
+                                @ev.StartDate.ToFriendlyDateTime()
+                            </td>
+                            <td>
+                                @ev.EndDate.ToFriendlyDateTime()
+                            </td>
+                            <td>
+                                @ev.Username
+                            </td>
+
+                            <td>
+                                @if (ev.UserId == Model.CurrentUserId)
+                                {
+                                    <div class="col-md-6">
+                                        <a href="/events/edit/@ev.Id" class=" btn btn-warning btn-sm form-control">Edit</a>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <form method="post" action="/events/delete/@ev.Id">
+                                            @Html.AntiForgeryToken()
+                                            <button class="btn btn-danger btn-sm form-control">Delete</button>
+                                        </form>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <a class="btn btn-info form-control">You can't change this event</a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <div class="row">
+                <div class="col-md-6 col-lg-offset-3">
+                    <a href="/events/all" class="btn btn-info form-control">View All Events</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="~/js/accordion.js"></script>
